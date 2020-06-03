@@ -14,13 +14,13 @@ app.on("ready", () => {
 });
 
 function createAddWindow() {
-    addWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
-        title: 'Add New Todo'
-    });
-    // addWindow.loadURL(`file://${__dirname}/add.html`);
-    // addWindow.on('closed', () => addWindow = null);
+  addWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+    title: "Add New Todo",
+  });
+  addWindow.loadURL(`file://${__dirname}/add.html`);
+  addWindow.on("closed", () => (addWindow = null));
 }
 
 //create a menu template
@@ -30,14 +30,13 @@ const menuTemplate = [
     submenu: [
       {
         label: "New Todo",
-        click() { createAddWindow(); }
+        click() {
+          createAddWindow();
+        },
       },
       {
         label: "Quit",
-        accelerator: 
-        process.platform === "darwin" 
-        ? "Command+Q" 
-        : "Ctrl+Q",
+        accelerator: process.platform === "darwin" ? "Command+Q" : "Ctrl+Q",
         click() {
           app.quit();
         },
