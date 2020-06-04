@@ -8,8 +8,7 @@ let addWindow;
 app.on("ready", () => {
   mainWindow = new BrowserWindow({});
   mainWindow.loadURL(`file://${__dirname}/main.html`);
-  //closes all windows and subwindows
-  mainWindow.on('closed', () => app.quit());
+  mainWindow.on("closed", () => app.quit());
 
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(mainMenu);
@@ -25,12 +24,11 @@ function createAddWindow() {
   addWindow.on("closed", () => (addWindow = null));
 }
 
-ipcMain.on('todo:add', (event, todo) => {
-    mainWindow.webContents.send('todo:add', todo);
-    addWindow.close();
+ipcMain.on("todo:add", (event, todo) => {
+  mainWindow.webContents.send("todo:add", todo);
+  addWindow.close();
 });
 
-//create a menu template
 const menuTemplate = [
   {
     label: "File",
@@ -39,6 +37,12 @@ const menuTemplate = [
         label: "New Todo",
         click() {
           createAddWindow();
+        },
+      },
+      {
+        label: "Clear Todos",
+        click() {
+          mainWindow.webContents.send("todo:clear");
         },
       },
       {
@@ -55,8 +59,7 @@ const menuTemplate = [
 if (process.platform === "darwin") {
   menuTemplate.unshift({ label: "" });
 }
-//NODE_ENV stands for node environment
-//has 4 values: 'production', 'development', 'staging', 
+
 if (process.env.NODE_ENV !== "production") {
   menuTemplate.push({
     label: "View",
@@ -64,7 +67,8 @@ if (process.env.NODE_ENV !== "production") {
       { role: "reload" },
       {
         label: "Toggle Developer Tools",
-        accelerator: process.platform === "darwin" ? "Command+Alt+I" : "Ctrl+Shift+I",
+        accelerator:
+          process.platform === "darwin" ? "Command+Alt+I" : "Ctrl+Shift+I",
         click(item, focusedWindow) {
           focusedWindow.toggleDevTools();
         },
